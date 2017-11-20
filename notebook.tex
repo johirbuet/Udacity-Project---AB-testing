@@ -302,11 +302,29 @@ of these topics as possible. Good luck!
 
      \#\#\# Introduction
 
+A/B tests are very commonly performed by data analysts and data
+scientists. It is important that you get some practice working with the
+difficulties of these
+
+For this project, you will be working to understand the results of an
+A/B test run by an e-commerce website. Your goal is to work through this
+notebook to help the company understand if they should implement the new
+page, keep the old page, or perhaps run the experiment longer to make
+their decision.
+
+\textbf{As you work through this notebook, follow along in the classroom
+and answer the corresponding quiz questions associated with each
+question.} The labels for each classroom concept are provided for each
+question. This will assure you are on the right track as you work
+through the project, and you can feel more confident in your final
+submission meeting the criteria. As a final check, assure you meet all
+the criteria on the
+\href{https://review.udacity.com/\#!/projects/37e27304-ad47-4eb0-a1ab-8c12f60e43d0/rubric}{RUBRIC}.
+
  \#\#\#\# Part I - Probability
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}1}]:} \PY{c+c1}{\PYZsh{} import libraries}
-        
         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
@@ -318,15 +336,18 @@ of these topics as possible. Good luck!
 \end{Verbatim}
 
 
-    \texttt{Question\ 1.}
+    \texttt{Question\ 1.} Now, read in the \texttt{ab\_data.csv} data. Store
+it in \texttt{df}. \textbf{Use your dataframe to answer the questions in
+Quiz 1 of the classroom.}
 
-\texttt{a.} Import data and look at top rows
+\texttt{a.} Read in the dataset and take a look at the top few rows
+here:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} import data}
-        
         \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ab\PYZus{}data.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
         
+        \PY{c+c1}{\PYZsh{} show top rows}
         \PY{n}{df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
@@ -340,23 +361,26 @@ of these topics as possible. Good luck!
         4   864975  2017-01-21 01:52:26.210827    control     old\_page          1
 \end{Verbatim}
             
-    \texttt{b.} Find the number of rows in the dataset.
+    \texttt{b.} Use the below cell to find the number of rows in the
+dataset.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{df\PYZus{}length} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df}\PY{p}{)}
-                        
-        \PY{n}{df\PYZus{}length}
+{\color{incolor}In [{\color{incolor}3}]:} \PY{c+c1}{\PYZsh{} Calculate number of rows in dataset and display}
+        \PY{n}{df\PYZus{}length} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df}\PY{p}{)}         
+        \PY{n+nb}{print}\PY{p}{(}\PY{n}{df\PYZus{}length}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}3}]:} 294478
-\end{Verbatim}
-            
+    \begin{Verbatim}[commandchars=\\\{\}]
+294478
+
+    \end{Verbatim}
+
     \texttt{c.}Number of unique users in the dataset.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{user\PYZus{}id}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}4}]:} \PY{c+c1}{\PYZsh{} Calculate number of unique users in dataset}
+        \PY{n+nb}{len}\PY{p}{(}\PY{n}{df}\PY{o}{.}\PY{n}{user\PYZus{}id}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -364,7 +388,7 @@ of these topics as possible. Good luck!
 {\color{outcolor}Out[{\color{outcolor}4}]:} 290584
 \end{Verbatim}
             
-    \texttt{d.} Proportion of users converted.
+    \texttt{d.} The proportion of users converted.
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}5}]:} \PY{n}{df}\PY{o}{.}\PY{n}{converted}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{/}\PY{n}{df\PYZus{}length}
@@ -375,16 +399,18 @@ of these topics as possible. Good luck!
 {\color{outcolor}Out[{\color{outcolor}5}]:} 0.11965919355605512
 \end{Verbatim}
             
-    \texttt{e.} number of times the \texttt{new\_page} and
+    \texttt{e.} The number of times the \texttt{new\_page} and
 \texttt{treatment} don't line up.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{df\PYZus{}t\PYZus{}not\PYZus{}n} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{group}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{treatment}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{old\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
-        
+{\color{incolor}In [{\color{incolor}6}]:} \PY{c+c1}{\PYZsh{} Looking for rows where treatment/control doesn\PYZsq{}t line up with old/new pages respectively}
+        \PY{n}{df\PYZus{}t\PYZus{}not\PYZus{}n} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{group}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{treatment}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{old\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
         \PY{n}{df\PYZus{}not\PYZus{}t\PYZus{}n} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{group}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{control}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{new\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
         
+        \PY{c+c1}{\PYZsh{} Add lengths}
         \PY{n}{mismatch}\PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}t\PYZus{}not\PYZus{}n}\PY{p}{)} \PY{o}{+} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}not\PYZus{}t\PYZus{}n}\PY{p}{)}
         
+        \PY{c+c1}{\PYZsh{} Create one dataframe from it}
         \PY{n}{mismatch\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{df\PYZus{}t\PYZus{}not\PYZus{}n}\PY{p}{,} \PY{n}{df\PYZus{}not\PYZus{}t\PYZus{}n}\PY{p}{]}\PY{p}{)}
         
         \PY{n}{mismatch}
@@ -395,10 +421,11 @@ of these topics as possible. Good luck!
 {\color{outcolor}Out[{\color{outcolor}6}]:} 3893
 \end{Verbatim}
             
-    \texttt{f.} Rows with missing values
+    \texttt{f.} Do any rows have missing values?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{any}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}7}]:} \PY{c+c1}{\PYZsh{} Check for missing values?}
+        \PY{n}{df}\PY{o}{.}\PY{n}{isnull}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{any}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -406,10 +433,15 @@ of these topics as possible. Good luck!
 {\color{outcolor}Out[{\color{outcolor}7}]:} False
 \end{Verbatim}
             
-    \texttt{Question\ 2}
+    \texttt{Question\ 2.} For the rows where \textbf{treatment} is not
+aligned with \textbf{new\_page} or \textbf{control} is not aligned with
+\textbf{old\_page}, we cannot be sure if this row truly received the new
+or old page. Use \textbf{Quiz 2} in the classroom to provide how we
+should handle these rows.
 
-\texttt{a.}Create a new dataset with misalligned rows removed. Store new
-dataframe in df2.
+\texttt{a.} Now use the answer to the quiz to create a new dataset that
+meets the specifications from the quiz. Store your new dataframe in
+\textbf{df2}.
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}8}]:} \PY{c+c1}{\PYZsh{} Copy dataframe}
@@ -436,18 +468,25 @@ dataframe in df2.
 \texttt{a.} How many unique user\_ids are in df2?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{o}{.}\PY{n}{user\PYZus{}id}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}10}]:} \PY{c+c1}{\PYZsh{} Find unique users}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Unique users:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{o}{.}\PY{n}{user\PYZus{}id}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Check for not unique users}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Non\PYZhy{}unique users:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{o}{.}\PY{n}{user\PYZus{}id}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}10}]:} 1
-\end{Verbatim}
-            
+    \begin{Verbatim}[commandchars=\\\{\}]
+Unique users: 290584
+Non-unique users: 1
+
+    \end{Verbatim}
+
     \texttt{b.} There is one user\_id repeated in df2. What is it?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{o}{.}\PY{n}{duplicated}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{user\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
+{\color{incolor}In [{\color{incolor}11}]:} \PY{c+c1}{\PYZsh{} Find duplicated user}
+         \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{o}{.}\PY{n}{duplicated}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{user\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
 \end{Verbatim}
 
 
@@ -459,7 +498,8 @@ dataframe in df2.
     \texttt{c.} What is the row information for the repeat user\_id?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{user\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{773192}\PY{p}{]}
+{\color{incolor}In [{\color{incolor}12}]:} \PY{c+c1}{\PYZsh{} Find duplicates under user ids}
+         \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{user\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{773192}\PY{p}{]}
 \end{Verbatim}
 
 
@@ -473,7 +513,8 @@ dataframe in df2.
 dataframe as df2
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{df2}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{labels}\PY{o}{=}\PY{l+m+mi}{1899}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} Drop duplicated user}
+         \PY{n}{df2}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{labels}\PY{o}{=}\PY{l+m+mi}{1899}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -494,50 +535,61 @@ dataframe as df2
 regardless of the page they receive?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{df2}\PY{o}{.}\PY{n}{converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}15}]:} \PY{c+c1}{\PYZsh{} Probability of user converting}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of user converting:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{df2}\PY{o}{.}\PY{n}{converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}15}]:} 0.11959708724499628
-\end{Verbatim}
-            
+    \begin{Verbatim}[commandchars=\\\{\}]
+Probability of user converting: 0.11959708724499628
+
+    \end{Verbatim}
+
     \texttt{b.} Given that an individual was in the control group, what is
 the probability they converted?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}16}]:} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{group}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{control}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}16}]:} \PY{c+c1}{\PYZsh{} Probability of control group converting}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of control group converting:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+               \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{group}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{control}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}16}]:} 0.1203863045004612
-\end{Verbatim}
-            
+    \begin{Verbatim}[commandchars=\\\{\}]
+Probability of control group converting: 0.1203863045004612
+
+    \end{Verbatim}
+
     \texttt{c.} Given that an individual was in the treatment group, what is
 the probability they converted?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{group}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{treatment}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{} Probability of treatment group converting}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of treatment group converting:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+               \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{group}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{treatment}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}17}]:} 0.11880806551510564
-\end{Verbatim}
-            
+    \begin{Verbatim}[commandchars=\\\{\}]
+Probability of treatment group converting: 0.11880806551510564
+
+    \end{Verbatim}
+
     \texttt{d.} What is the probability that an individual received the new
 page?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}18}]:} \PY{c+c1}{\PYZsh{} Probability an individual recieved new page}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability an individual recieved new page:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+               \PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}18}]:} 0.50006194422266881
-\end{Verbatim}
-            
+    \begin{Verbatim}[commandchars=\\\{\}]
+Probability an individual recieved new page: 0.500061944223
+
+    \end{Verbatim}
+
     \texttt{e.} Use the results in the previous two portions of this
 question to suggest if you think there is evidence that one page leads
 to more conversions? Write your response below.
@@ -596,49 +648,57 @@ from the data and let this average value be the value we use. (Confusing
 sentence, hopefully you get what I mean.)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{p\PYZus{}new} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{new\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}19}]:} \PY{c+c1}{\PYZsh{} Calculate probability of conversion for new page}
+         \PY{n}{p\PYZus{}new} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{new\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
          
-         \PY{n}{p\PYZus{}new}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of conversion for new page:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{p\PYZus{}new}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}19}]:} 0.11880806551510564
-\end{Verbatim}
-            
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{p\PYZus{}old} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{old\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
-         
-         \PY{n}{p\PYZus{}old}
-\end{Verbatim}
+Probability of conversion for new page: 0.11880806551510564
 
+    \end{Verbatim}
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}20}]:} 0.1203863045004612
-\end{Verbatim}
-            
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{p\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{[}\PY{n}{p\PYZus{}new}\PY{p}{,} \PY{n}{p\PYZus{}old}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}20}]:} \PY{c+c1}{\PYZsh{} Calculate probability of conversion for old page}
+         \PY{n}{p\PYZus{}old} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{old\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
          
-         \PY{n}{p\PYZus{}mean}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of conversion for old page:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{p\PYZus{}old}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}21}]:} 0.11959718500778342
-\end{Verbatim}
-            
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}22}]:} \PY{n}{p\PYZus{}diff} \PY{o}{=} \PY{n}{p\PYZus{}new}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}old}
+Probability of conversion for old page: 0.1203863045004612
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{c+c1}{\PYZsh{} Take the mean of these two probabilities}
+         \PY{n}{p\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{[}\PY{n}{p\PYZus{}new}\PY{p}{,} \PY{n}{p\PYZus{}old}\PY{p}{]}\PY{p}{)}
          
-         \PY{n}{p\PYZus{}diff}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of conversion udner null hypothesis:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{p\PYZus{}mean}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}22}]:} -0.0015782389853555567
+    \begin{Verbatim}[commandchars=\\\{\}]
+Probability of conversion udner null hypothesis: 0.119597185008
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{c+c1}{\PYZsh{} Calc. differences in probability of conversion for new and old page (not under H\PYZus{}0)}
+         \PY{n}{p\PYZus{}diff} \PY{o}{=} \PY{n}{p\PYZus{}new}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}old}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Difference in probability of conversion for new and old page (not under H\PYZus{}0):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{p\PYZus{}diff}\PY{p}{)}
 \end{Verbatim}
-            
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Difference in probability of conversion for new and old page (not under H\_0): -0.0015782389853555567
+
+    \end{Verbatim}
+
     Hence:
 
 \(p_{new}: 0.1188\)
@@ -658,7 +718,8 @@ The same thing.
 \(p_{new_0} - p_{old_0}: 0\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{n\PYZus{}old} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{} Calculate n\PYZus{}new and n\PYZus{}old}
+         \PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{n\PYZus{}old} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
          
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{new:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{n\PYZus{}new}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{old:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{n\PYZus{}old}\PY{p}{)}
 \end{Verbatim}
@@ -685,7 +746,8 @@ old: 145274
 new\_page\_converted.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{new\PYZus{}page\PYZus{}converted} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{[}\PY{n}{p\PYZus{}mean}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}mean}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} Simulate conversion rates under null hypothesis}
+         \PY{n}{new\PYZus{}page\PYZus{}converted} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{[}\PY{n}{p\PYZus{}mean}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}mean}\PY{p}{)}\PY{p}{]}\PY{p}{)}
          
          \PY{n}{new\PYZus{}page\PYZus{}converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
@@ -700,7 +762,8 @@ new\_page\_converted.
 \textbf{old\_page\_converted}.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{old\PYZus{}page\PYZus{}converted} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}old}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{[}\PY{n}{p\PYZus{}mean}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}mean}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}25}]:} \PY{c+c1}{\PYZsh{} Simulate conversion rates under null hypothesis}
+         \PY{n}{old\PYZus{}page\PYZus{}converted} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}old}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{[}\PY{n}{p\PYZus{}mean}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}mean}\PY{p}{)}\PY{p}{]}\PY{p}{)}
          
          \PY{n}{old\PYZus{}page\PYZus{}converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
@@ -714,7 +777,8 @@ new\_page\_converted.
 part (e) and (f).
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}26}]:} \PY{n}{new\PYZus{}page\PYZus{}converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{old\PYZus{}page\PYZus{}converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}26}]:} \PY{c+c1}{\PYZsh{} Calculate difference in p under the null hypothesis}
+         \PY{n}{new\PYZus{}page\PYZus{}converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{old\PYZus{}page\PYZus{}converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -729,6 +793,8 @@ through g.} above. Store all 10,000 values in \textbf{p\_diffs}.
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}27}]:} \PY{n}{p\PYZus{}diffs} \PY{o}{=} \PY{p}{[}\PY{p}{]}
          
+         \PY{c+c1}{\PYZsh{} Re\PYZhy{}run simulation 10,000 times}
+         \PY{c+c1}{\PYZsh{} trange creates an estimate for how long this program will take to run}
          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{trange}\PY{p}{(}\PY{l+m+mi}{10000}\PY{p}{)}\PY{p}{:}
              \PY{n}{new\PYZus{}page\PYZus{}converted} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{[}\PY{n}{p\PYZus{}mean}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}mean}\PY{p}{)}\PY{p}{]}\PY{p}{)}
              \PY{n}{old\PYZus{}page\PYZus{}converted} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}old}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{[}\PY{n}{p\PYZus{}mean}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}mean}\PY{p}{)}\PY{p}{]}\PY{p}{)}
@@ -739,7 +805,7 @@ through g.} above. Store all 10,000 values in \textbf{p\_diffs}.
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-100\%|██████████| 10000/10000 [00:40<00:00, 244.69it/s]
+100\%|██████████| 10000/10000 [00:40<00:00, 249.47it/s]
 
     \end{Verbatim}
 
@@ -748,7 +814,8 @@ look like what you expected? Use the matching problem in the classroom
 to assure you fully understand what was computed here.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}28}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{p\PYZus{}diffs}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{25}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}28}]:} \PY{c+c1}{\PYZsh{} Plot histogram}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{p\PYZus{}diffs}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{25}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Simulated Difference of New Page and Old Page Converted Under the Null}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Page difference}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Frequency}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
@@ -777,12 +844,14 @@ on where it falls on this bell curve
 the actual difference observed in \textbf{ab\_data.csv}?
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}29}]:} \PY{n}{greater\PYZus{}than\PYZus{}diff} \PY{o}{=} \PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{p\PYZus{}diffs} \PY{k}{if} \PY{n}{i} \PY{o}{\PYZgt{}} \PY{p}{(}\PY{n}{p\PYZus{}new}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}old}\PY{p}{)}\PY{p}{]}
+{\color{incolor}In [{\color{incolor}29}]:} \PY{c+c1}{\PYZsh{} Find proportion of p\PYZus{}diffs greater than the actual difference}
+         \PY{n}{greater\PYZus{}than\PYZus{}diff} \PY{o}{=} \PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{p\PYZus{}diffs} \PY{k}{if} \PY{n}{i} \PY{o}{\PYZgt{}} \PY{p}{(}\PY{n}{p\PYZus{}new}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}old}\PY{p}{)}\PY{p}{]}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}30}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Actual difference:}\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{p\PYZus{}new}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}old}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}30}]:} \PY{c+c1}{\PYZsh{} Calculate values}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Actual difference:}\PY{l+s+s2}{\PYZdq{}} \PY{p}{,} \PY{n}{p\PYZus{}new}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}old}\PY{p}{)}
          
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Proportion greater than actual difference:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{greater\PYZus{}than\PYZus{}diff}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{p\PYZus{}diffs}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
@@ -817,8 +886,10 @@ individuals who received each page. Let \texttt{n\_old} and
 page and new pages, respectively.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}31}]:} \PY{k+kn}{import} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k}{as} \PY{n+nn}{sm}
+{\color{incolor}In [{\color{incolor}31}]:} \PY{c+c1}{\PYZsh{} Import statsmodels}
+         \PY{k+kn}{import} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k}{as} \PY{n+nn}{sm}
          
+         \PY{c+c1}{\PYZsh{} Calculate number of conversions}
          \PY{n}{convert\PYZus{}old} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{p}{[}\PY{p}{(}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{new\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]}\PY{p}{)}
          \PY{n}{convert\PYZus{}new} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df2}\PY{p}{[}\PY{p}{(}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{old\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{\PYZam{}}\PY{p}{(}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]}\PY{p}{)}
          
@@ -856,7 +927,8 @@ test statistic and p-value.
 is a helpful link on using the built in.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}32}]:} \PY{n}{z\PYZus{}score}\PY{p}{,} \PY{n}{p\PYZus{}value} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{stats}\PY{o}{.}\PY{n}{proportions\PYZus{}ztest}\PY{p}{(}\PY{n}{count}\PY{o}{=}\PY{p}{[}\PY{n}{convert\PYZus{}new}\PY{p}{,} \PY{n}{convert\PYZus{}old}\PY{p}{]}\PY{p}{,} 
+{\color{incolor}In [{\color{incolor}32}]:} \PY{c+c1}{\PYZsh{} Find z\PYZhy{}score and p\PYZhy{}value}
+         \PY{n}{z\PYZus{}score}\PY{p}{,} \PY{n}{p\PYZus{}value} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{stats}\PY{o}{.}\PY{n}{proportions\PYZus{}ztest}\PY{p}{(}\PY{n}{count}\PY{o}{=}\PY{p}{[}\PY{n}{convert\PYZus{}new}\PY{p}{,} \PY{n}{convert\PYZus{}old}\PY{p}{]}\PY{p}{,} 
                                                        \PY{n}{nobs}\PY{o}{=}\PY{p}{[}\PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{n\PYZus{}old}\PY{p}{]}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{z\PYZhy{}score:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{z\PYZus{}score}\PY{p}{,}
               \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{p\PYZhy{}value:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{p\PYZus{}value}\PY{p}{)}
@@ -982,7 +1054,10 @@ created in part \textbf{b.} to predict whether or not an individual
 converts.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}37}]:} \PY{n}{logit} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{Logit}\PY{p}{(}\PY{n}{df3}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{df3}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ab\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{intercept}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}37}]:} \PY{c+c1}{\PYZsh{} Set up logistic regression}
+         \PY{n}{logit} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{Logit}\PY{p}{(}\PY{n}{df3}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{df3}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ab\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{intercept}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Calculate results}
          \PY{n}{result}\PY{o}{=}\PY{n}{logit}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
@@ -1009,7 +1084,7 @@ necessary to answer the following questions.
          ==================================================================
          Model:              Logit            No. Iterations:   6.0000     
          Dependent Variable: converted        Pseudo R-squared: 0.000      
-         Date:               2017-11-20 15:15 AIC:              212780.3502
+         Date:               2017-11-20 16:00 AIC:              212780.3502
          No. Observations:   290584           BIC:              212801.5095
          Df Model:           1                Log-Likelihood:   -1.0639e+05
          Df Residuals:       290582           LL-Null:          -1.0639e+05
@@ -1147,7 +1222,8 @@ Optimization terminated successfully.
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}42}]:} \PY{n}{result2}\PY{o}{.}\PY{n}{summary2}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}42}]:} \PY{c+c1}{\PYZsh{} Show results}
+         \PY{n}{result2}\PY{o}{.}\PY{n}{summary2}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1158,7 +1234,7 @@ Optimization terminated successfully.
          ==================================================================
          Model:              Logit            No. Iterations:   6.0000     
          Dependent Variable: converted        Pseudo R-squared: 0.000      
-         Date:               2017-11-20 15:15 AIC:              212780.8333
+         Date:               2017-11-20 16:00 AIC:              212780.8333
          No. Observations:   290584           BIC:              212812.5723
          Df Model:           2                Log-Likelihood:   -1.0639e+05
          Df Residuals:       290581           LL-Null:          -1.0639e+05
@@ -1203,7 +1279,8 @@ Optimization terminated successfully.
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}44}]:} \PY{n}{result3}\PY{o}{.}\PY{n}{summary2}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}44}]:} \PY{c+c1}{\PYZsh{} Show results}
+         \PY{n}{result3}\PY{o}{.}\PY{n}{summary2}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1214,7 +1291,7 @@ Optimization terminated successfully.
          ==================================================================
          Model:              Logit            No. Iterations:   6.0000     
          Dependent Variable: converted        Pseudo R-squared: 0.000      
-         Date:               2017-11-20 15:15 AIC:              212781.1253
+         Date:               2017-11-20 16:00 AIC:              212781.1253
          No. Observations:   290584           BIC:              212823.4439
          Df Model:           3                Log-Likelihood:   -1.0639e+05
          Df Residuals:       290580           LL-Null:          -1.0639e+05
@@ -1246,7 +1323,14 @@ variation. (Especially because multiple methods were used to analyze the
 data.)
 
 It was also found that this was not dependent on countries with
-conversion rates being roughly the same in the UK as in the US.
+conversion rates being roughly the same in the UK as in the US. The test
+conditions were fairly good as well, users had a roughly 50\% chance to
+recieve the new and old pages and the sample size of the initial
+dataframe is sufficiently big such that collecting data is likely not a
+good use of resources.
+
+I would recommend that the e-commerce company spend their money on
+trying to improve their website before trying again.
 
 
     % Add a bibliography block to the postdoc
