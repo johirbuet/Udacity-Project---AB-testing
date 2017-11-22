@@ -620,7 +620,17 @@ converted rates for the old and new pages.
 
     \(H_0: p_{new} \leq p_{old}\)
 
+or
+
+\(H_0: p_{new}-p_{old}\leq 0\)
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
 \(H_1: p_{new} > p_{old}\)
+
+or
+
+\(H_1: p_{new}-p_{old} > 0\)
 
     \texttt{Question\ 2.} Assume under the null hypothesis, \(p_{new}\) and
 \(p_{old}\) both have "true" success rates equal to the converted
@@ -648,7 +658,7 @@ from the data and let this average value be the value we use. (Confusing
 sentence, hopefully you get what I mean.)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{c+c1}{\PYZsh{} Calculate probability of conversion for new page}
+{\color{incolor}In [{\color{incolor}45}]:} \PY{c+c1}{\PYZsh{} Calculate probability of conversion for new page}
          \PY{n}{p\PYZus{}new} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{new\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
          
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of conversion for new page:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{p\PYZus{}new}\PY{p}{)}
@@ -661,7 +671,7 @@ Probability of conversion for new page: 0.11880806551510564
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{c+c1}{\PYZsh{} Calculate probability of conversion for old page}
+{\color{incolor}In [{\color{incolor}46}]:} \PY{c+c1}{\PYZsh{} Calculate probability of conversion for old page}
          \PY{n}{p\PYZus{}old} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{==}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{old\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{converted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
          
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Probability of conversion for old page:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{p\PYZus{}old}\PY{p}{)}
@@ -715,10 +725,10 @@ null?
 
 The same thing.
 
-\(p_{new_0} - p_{old_0}: 0\)
+\(p_{new_0} - p_{old_0}= 0\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{} Calculate n\PYZus{}new and n\PYZus{}old}
+{\color{incolor}In [{\color{incolor}47}]:} \PY{c+c1}{\PYZsh{} Calculate n\PYZus{}new and n\PYZus{}old}
          \PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{n\PYZus{}old} \PY{o}{=} \PY{n}{df2}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{landing\PYZus{}page}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
          
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{new:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{n\PYZus{}new}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{old:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{n\PYZus{}old}\PY{p}{)}
@@ -746,7 +756,7 @@ old: 145274
 new\_page\_converted.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} Simulate conversion rates under null hypothesis}
+{\color{incolor}In [{\color{incolor}48}]:} \PY{c+c1}{\PYZsh{} Simulate conversion rates under null hypothesis}
          \PY{n}{new\PYZus{}page\PYZus{}converted} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n}{n\PYZus{}new}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{p}{[}\PY{n}{p\PYZus{}mean}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{p\PYZus{}mean}\PY{p}{)}\PY{p}{]}\PY{p}{)}
          
          \PY{n}{new\PYZus{}page\PYZus{}converted}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
@@ -754,7 +764,7 @@ new\_page\_converted.
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}24}]:} 0.11979216846741449
+{\color{outcolor}Out[{\color{outcolor}48}]:} 0.11902828435758035
 \end{Verbatim}
             
     \texttt{f.} Simulate \(n_{old}\) transactions with a convert rate of
@@ -805,7 +815,7 @@ through g.} above. Store all 10,000 values in \textbf{p\_diffs}.
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-100\%|██████████| 10000/10000 [00:40<00:00, 249.47it/s]
+100\%|██████████| 10000/10000 [00:40<00:00, 243.96it/s]
 
     \end{Verbatim}
 
@@ -814,7 +824,7 @@ look like what you expected? Use the matching problem in the classroom
 to assure you fully understand what was computed here.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}28}]:} \PY{c+c1}{\PYZsh{} Plot histogram}
+{\color{incolor}In [{\color{incolor}50}]:} \PY{c+c1}{\PYZsh{} Plot histogram}
          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{p\PYZus{}diffs}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{25}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Simulated Difference of New Page and Old Page Converted Under the Null}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Page difference}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
@@ -871,10 +881,11 @@ the new and old pages?
     If our sample conformed to the null hypothesis then we'd expect the
 proportion greater than the actual difference to be 0.5. However, we
 calculate that almost 90\% of the population in our simulated sample
-lies above the real difference which suggests that the real sample
-likely does not comform to the null hypothesis.
+lies above the real difference which does not only suggest that the new
+page does not do significantly better than the old page, it might even
+be worse!
 
-I'm not sure what this value is called however.
+The value calculated above is the p-value.
 
     \texttt{l.} We could also use a built-in to achieve similar results.
 Though using the built-in might be easier to code, the above portions
@@ -904,16 +915,16 @@ page and new pages, respectively.
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-convert\_old: 17264 
-convert\_new: 17489 
-n\_old: 145274 
-n\_new: 145310
+/home/simon/anaconda3/lib/python3.6/site-packages/statsmodels/compat/pandas.py:56: FutureWarning: The pandas.core.datetools module is deprecated and will be removed in a future version. Please use the pandas.tseries module instead.
+  from pandas.core import datetools
 
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-/home/simon/anaconda3/lib/python3.6/site-packages/statsmodels/compat/pandas.py:56: FutureWarning: The pandas.core.datetools module is deprecated and will be removed in a future version. Please use the pandas.tseries module instead.
-  from pandas.core import datetools
+convert\_old: 17264 
+convert\_new: 17489 
+n\_old: 145274 
+n\_new: 145310
 
     \end{Verbatim}
 
@@ -1084,7 +1095,7 @@ necessary to answer the following questions.
          ==================================================================
          Model:              Logit            No. Iterations:   6.0000     
          Dependent Variable: converted        Pseudo R-squared: 0.000      
-         Date:               2017-11-20 16:00 AIC:              212780.3502
+         Date:               2017-11-22 14:04 AIC:              212780.3502
          No. Observations:   290584           BIC:              212801.5095
          Df Model:           1                Log-Likelihood:   -1.0639e+05
          Df Residuals:       290582           LL-Null:          -1.0639e+05
@@ -1234,7 +1245,7 @@ Optimization terminated successfully.
          ==================================================================
          Model:              Logit            No. Iterations:   6.0000     
          Dependent Variable: converted        Pseudo R-squared: 0.000      
-         Date:               2017-11-20 16:00 AIC:              212780.8333
+         Date:               2017-11-22 14:04 AIC:              212780.8333
          No. Observations:   290584           BIC:              212812.5723
          Df Model:           2                Log-Likelihood:   -1.0639e+05
          Df Residuals:       290581           LL-Null:          -1.0639e+05
@@ -1291,7 +1302,7 @@ Optimization terminated successfully.
          ==================================================================
          Model:              Logit            No. Iterations:   6.0000     
          Dependent Variable: converted        Pseudo R-squared: 0.000      
-         Date:               2017-11-20 16:00 AIC:              212781.1253
+         Date:               2017-11-22 14:04 AIC:              212781.1253
          No. Observations:   290584           BIC:              212823.4439
          Df Model:           3                Log-Likelihood:   -1.0639e+05
          Df Residuals:       290580           LL-Null:          -1.0639e+05
@@ -1316,11 +1327,8 @@ though which is interesting.
 
     Although it would seem from the outset that there is a difference
 between the conversion rates of new and old pages, there is just not
-enough evidence to reject the null hypothesis. That is, the difference
-in the conversion rates between new and old pages are not just not great
-enough to say with at least 95\% certainity that it's just a random
-variation. (Especially because multiple methods were used to analyze the
-data.)
+enough evidence to reject the null hypothesis. From the histogram shown
+in this report, it seems that the new page does worse than the old pa.
 
 It was also found that this was not dependent on countries with
 conversion rates being roughly the same in the UK as in the US. The test
@@ -1330,7 +1338,8 @@ dataframe is sufficiently big such that collecting data is likely not a
 good use of resources.
 
 I would recommend that the e-commerce company spend their money on
-trying to improve their website before trying again.
+trying to improve their website before trying again. If anything,
+perhaps do some reason into why the page performed so poorly.
 
 
     % Add a bibliography block to the postdoc
